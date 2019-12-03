@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<!--
+	Industrious by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>MuzeCentra</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+        <!-- Header -->
+            <header id="header">
+                <a class="logo" href="{% url 'index' %}">MuzeCentra</a>
+            </header>
+		<!-- Heading -->
+			<div id="heading" >
+				<h1>MuzeCentra Muze Page</h1>
+			</div>
+
+		<!-- Main -->
+			<section id="main" class="wrapper">
+				<div class="inner">
+					<div class="content">
+						<header>
+							<h2 style="color: crimson;">초대 코드 : {{room_name}}</h2>
+                        </header>
+                        <div class="row">
+							<div class="col-6 col-12-medium" style="height: 400px;">
+								<div id="music_player">
+									<div id="title">
+										<div id="timer">0:00</div>
+										<div id="duration">0:00</div>
+										<div id="track"></div>
+									</div>
+									<!-- Controls -->
+									<div class="controlsOuter">
+										<div class="controlsInner">
+										<div id="loading"></div>
+										<img class="btn" id="playBtn" src="/static/images/start.png">
+										<img class="btn" id="pauseBtn" src="/static/images/pause.png">
+										<img class="btn" id="prevBtn" src="/static/images/prev.png">
+										<img class="btn" id="nextBtn" src="/static/images/next.png">
+										</div>
+										<div class="btn" id="volumeBtn"></div>
+									</div>
+									
+									<!-- Progress -->
+									<div id="waveform"></div>
+									<div id="bar"></div>
+									<div id="progress"></div>
+									
+									<!-- Volume -->
+									<div id="volume" class="fadeout">
+										<div id="barFull" class="bar"></div>
+										<div id="barEmpty" class="bar"></div>
+										<div id="sliderBtn"></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-6 col-12-medium">
+								<table id="list">
+									<thead>
+										<tr>
+											<td>순번</td>
+											<td>닉네임</td>
+											<td>곡 이름</td>
+										</tr>
+									</thead>
+								</table>
+							</div>    
+                        </div>
+                    </div>
+				</div>
+			</section>
+		<!-- Scripts -->
+		<script src="/static/assets/js/jquery.min.js"></script>
+		<script src="/static/assets/js/browser.min.js"></script>
+		<script src="/static/assets/js/breakpoints.min.js"></script>
+		<script src="/static/assets/js/util.js"></script>
+		<script src="/static/assets/js/main.js"></script>
+		<script src="/static/assets/js/howler.js"></script>
+		<script src="/static/assets/js/howler.core.js"></script>
+		<script src="/static/assets/js/siriwave.js"></script>
+		<script src="/static/assets/js/player.js"></script>
+        <script>
+            var roomName = {{ room_name_json }};
+
+            var chatSocket = new WebSocket(
+                'ws://' + window.location.host +
+                '/ws/main/' + roomName + '/');
+
+            chatSocket.onmessage = function(e) {
+                var data = JSON.parse(e.data);
+                var type = data["type"];
+                var message = data['message'];
+                if(type=="add_song"){
+                    let pt=message.replace("downloadedmusics/","/static/")+"/dlfile";
+                    fetch(pt+".info.json")
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(myJson) {
+                        addSong({title:myJson.title,file:pt+".opus", nickname:"Guest", thumb_nail:pt+".jpg", howl:null})
+                        console.log(myJson);
+                    });
+                }
+            };
+
+            chatSocket.onclose = function(e) {
+                console.error('Chat socket closed unexpectedly');
+            };
+        </script>
+		<script type="text/javascript">
+			$(function(){
+				$("iframe.player").load(function(){ //iframe 컨텐츠가 로드 된 후에 호출됩니다.
+					var frame = $(this).get(0);
+					var doc = (frame.contentDocument) ? frame.contentDocument : frame.contentWindow.document;
+					$(this).height(doc.body.scrollHeight);
+					$(this).width(doc.body.scrollWidth);
+				});
+			});
+        </script>
+	</body>
+</html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+</body>
+<script>
+    var roomName = {{ room_name_json }};
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/main/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        document.querySelector('#chat-log').value += (message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+</script>
+</html> -->

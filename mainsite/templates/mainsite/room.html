@@ -1,4 +1,135 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+<!--
+	Industrious by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>MuzeCentra</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link rel="stylesheet" href="/static/assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+		<!-- Header -->
+        <header id="header">
+				<a class="logo" href="{% url 'index' %}">MuzeCentra</a>
+			</header>
+		<!-- Heading -->
+			<div id="heading" >
+				<h1>MuzeCentra Guest Page</h1>
+			</div>
+
+		<!-- Main -->
+			<section id="main" class="wrapper">
+				<div class="inner">
+					<div class="content">
+
+					<!-- Elements -->
+						<div class="row">
+                            <h2 style="color: crimson;">현재 방코드 : {{room_name}}, 닉네임 : Guest</h2>
+							<div class="col-6 col-12-medium">
+                                <h3>곡 신청하기</h3>
+                                <form>
+                                    <div class="row gtr-uniform">
+                                        <div class="col-12">
+                                            <input type="text" id="music_title" value="자동으로 채워집니다" readonly placeholder="곡 이름" />
+                                        </div>
+                                        <!-- Break -->
+                                        <div class="col-12">
+                                            <textarea id="url" placeholder="곡 url을 입력하세요." rows="6"></textarea>
+                                        </div>
+                                        <!-- Break -->
+                                        <div class="col-12">
+                                            <ul class="actions">
+                                                <li><input type="button" onclick="onSubmit()" value="곡 신청하기" class="primary wide fit"/></li>
+                                                <li><input type="reset" value="Reset" class="wide" /></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </form>
+							</div>
+							<div class="col-6 col-12-medium">
+									<h3>곡 신청 현황</h3>
+									<div class="table-wrapper">
+                                        <table id="paly_list">
+                                            <thead>
+                                                <tr>
+                                                    <td>순번</td>
+                                                    <td>닉네임</td>
+                                                    <td>곡 이름</td>
+                                                </tr>
+                                            </thead>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>asdf</td>
+                                                <td>Painkiller</td>
+                                            </tr>
+                                        </table>
+									</div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</section>
+
+		<!-- Scripts -->
+			<script src="/static/assets/js/jquery.min.js"></script>
+			<script src="/static/assets/js/browser.min.js"></script>
+			<script src="/static/assets/js/breakpoints.min.js"></script>
+			<script src="/static/assets/js/util.js"></script>
+            <script src="/static/assets/js/main.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+			<script>
+                var roomName = {{ room_name_json }};
+    
+                var chatSocket = new WebSocket(
+                    'ws://' + window.location.host +
+                    '/ws/main/' + roomName + '/');
+    
+				var onSubmit = function() {
+					var title = document.getElementById("music_title");
+					var url = document.getElementById("url");
+					if (title.value == "") {
+						alert("곡 제목을 입력해주세요!");
+						return false;
+					}
+					if (url.value == "") {
+						alert("url을 입력해주세요!");
+						return false;
+					}
+                    chatSocket.send(JSON.stringify({
+                        "msgType":"request_song",
+                        'message': url.value
+                    }));
+                    Swal.fire({
+                        title: '확인중!',
+                        onBeforeOpen: () => {
+                            Swal.showLoading()
+                        }
+                        }).then((result) => {
+                            
+                    })                 
+				}
+                chatSocket.onmessage = function(e) {
+                    var data = JSON.parse(e.data);
+                    var type = data["type"];
+                    var message = data['message'];
+                    if(type=="request_result"){
+                        if(message)Swal.close();
+                    }
+                };
+
+                chatSocket.onclose = function(e) {
+                    console.error('Chat socket closed unexpectedly');
+                };
+			</script>
+	</body>
+</html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -8,6 +139,7 @@
     <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
     <input id="chat-message-input" type="text" size="100"/><br/>
     <input id="chat-message-submit" type="button" value="Send"/>
+    <input id="chat-message-submit2" type="button" value="SongReq"/>
 </body>
 <script>
     var roomName = {{ room_name_json }};
@@ -33,14 +165,26 @@
         }
     };
 
+    document.querySelector('#chat-message-submit2').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            "msgType":"request_song",
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+
     document.querySelector('#chat-message-submit').onclick = function(e) {
         var messageInputDom = document.querySelector('#chat-message-input');
         var message = messageInputDom.value;
         chatSocket.send(JSON.stringify({
+            "msgType":"chatchat",
             'message': message
         }));
 
         messageInputDom.value = '';
     };
 </script>
-</html>
+</html> -->

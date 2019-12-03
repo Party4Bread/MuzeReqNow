@@ -56,6 +56,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 
+downloadedmusics/*
 # Flask stuff:
 instance/
 .webassets-cache
