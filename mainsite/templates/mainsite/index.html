@@ -1,89 +1,79 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>MuzeCentra</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-        <link rel="stylesheet" href="/static/assets/css/main.css" />
-        <script>
-            function guestForm () {
-                var code = document.getElementById("invitation_code");
-                var nickname = document.getElementById("user_nickname");
-                if (code.value == "") {
-                    alert("코드를 입력해주세요!");
-                    return false;
-                }
-                if (nickname.value == "") {
-                    alert("닉네임을 입력해주세요!");
-                    return false;
-                }
-                location.href+=document.getElementById("invitation_code").value;
-                // 서버 통신 뭐시기
-                // ㅁㄴㅇㄹ
-                return true;
-            }
-        </script>
-	</head>
-	<body class="is-preload">
-		<!-- Header -->
-			<header id="header">
-				<a class="logo" href="{% url 'index' %}">MuzeCentra</a>
-			</header>
-		<!-- Banner -->
-			<section id="banner">
-				<div class="inner">
-					<h1>MuzeCentra</h1>
-					<p>여러 명이서 모여 있을 때, 무슨 음악을 틀지 곤란하다면</br>이 사이트를 통해서 쉽게 틀 수 있습니다.</p>
-				</div>
-				<video autoplay loop muted playsinline src="/static/images/banner.mp4"></video>
-			</section>
-		<!-- Highlights -->
-			<section class="wrapper">
-				<div class="inner">
-					<!-- <header class="special">
-						<h2>방을 구성하거나 참가하세요.</h2>
-						<p>Host가 되어서 노래를 재생하거나, Guest가 되어서 틀고 싶은 노래를 신청하세요.</p>
-					</header> -->
-					<div class="highlights">
-						<section>
-							<div class="content">
-								<header>
-									<a href="#" class="icon fa-vcard-o"><span class="label">Icon</span></a>
-									<h3>Muze 채널 생성하기</h3>
-								</header>
-                                <p>Muze가 되어 채널을 생성하고, 신청한 노래를 받아 틀어보세요.</p>
-                                <a href="{% url 'create_room' %}"><button class="primary">지금 바로 Muze 채널 생성하기</button></a>
-							</div>
-						</section>
-						<section>
-							<div class="content">
-								<header>
-									<a href="#" class="icon fa-line-chart"><span class="label">Icon</span></a>
-									<h3>Guset로 채널 참가</h3>
-								</header>
-                                <p>Host 채널의 초대 코드를 입력해 채널에 참가해 노래를 신청해보세요.</p>
-                                <form name="guestForm" >
-                                    <input id="invitation_code" type="text" placeholder="초대 코드 입력">
-                                    <input style="margin-top: 10%;" id="user_nickname" type="text" placeholder="닉네임" value="Guest" readonly>
-                                    <input style="margin-top: 10%;" type="button" value="채널 입장하기" class="button primary fit" onclick="location.href=document.getElementById('invitation_code').value">
-                                </form>
-							</div>
-						</section>
+{% extends "mainsite/head.html" %}
+{% block content %}
+
+<!-- Header -->
+	<header id="header">
+		<a class="logo" href="{% url 'index' %}">MuzeCentra</a>
+	</header>
+<!-- Banner -->
+	<section id="banner">
+		<div class="inner">
+			<h1>MuzeCentra</h1>
+			<p>여러 명이서 모여 있을 때, 무슨 음악을 틀지 곤란하다면</br>이 사이트를 통해서 쉽게 틀 수 있습니다.</p>
+		</div>
+		<video autoplay loop muted playsinline src="/static/images/banner.mp4"></video>
+	</section>
+<!-- Highlights -->
+	<section class="wrapper">
+		<div class="inner">
+			<!-- <header class="special">
+				<h2>방을 구성하거나 참가하세요.</h2>
+				<p>Host가 되어서 노래를 재생하거나, Guest가 되어서 틀고 싶은 노래를 신청하세요.</p>
+			</header> -->
+			<div class="highlights">
+				<section>
+					<div class="content">
+						<header>
+							<a href="#" class="icon fa-vcard-o"><span class="label">Icon</span></a>
+							<h3>Muze 채널 생성하기</h3>
+						</header>
+						<p>Muze가 되어 채널을 생성하고, 신청한 노래를 받아 틀어보세요.</p>
+						<a href="{% url 'create_room' %}"><button class="primary">지금 바로 Muze 채널 생성하기</button></a>
 					</div>
-				</div>
-			</section>
+				</section>
+				<section>
+					<div class="content">
+						<header>
+							<a href="#" class="icon fa-line-chart"><span class="label">Icon</span></a>
+							<h3>Guset로 채널 참가</h3>
+						</header>
+						<p>Host 채널의 초대 코드를 입력해 채널에 참가해 노래를 신청해보세요.</p>
+						<form name="guestForm" >
+							<input id="invitation_code" type="text" placeholder="초대 코드 입력">
+							<input style="margin-top: 10%;" id="user_nickname" type="text" placeholder="닉네임" value="Guest" readonly>
+							<input style="margin-top: 10%;" type="button" value="채널 입장하기" class="button primary fit" onclick="location.href=document.getElementById('invitation_code').value">
+						</form>
+					</div>
+				</section>
+			</div>
+		</div>
+	</section>
 
-		<!-- Scripts -->
-			<script src="/static/assets/js/jquery.min.js"></script>
-			<script src="/static/assets/js/browser.min.js"></script>
-			<script src="/static/assets/js/breakpoints.min.js"></script>
-			<script src="/static/assets/js/util.js"></script>
-			<script src="/static/assets/js/main.js"></script>
-
-	</body>
-</html>
+<!-- Scripts -->
+	<script src="/static/assets/js/jquery.min.js"></script>
+	<script src="/static/assets/js/browser.min.js"></script>
+	<script src="/static/assets/js/breakpoints.min.js"></script>
+	<script src="/static/assets/js/util.js"></script>
+	<script src="/static/assets/js/main.js"></script>
+	<script>
+			function guestForm () {
+				var code = document.getElementById("invitation_code");
+				var nickname = document.getElementById("user_nickname");
+				if (code.value == "") {
+					alert("코드를 입력해주세요!");
+					return false;
+				}
+				if (nickname.value == "") {
+					alert("닉네임을 입력해주세요!");
+					return false;
+				}
+				location.href+=document.getElementById("invitation_code").value;
+				// 서버 통신 뭐시기
+				// ㅁㄴㅇㄹ
+				return true;
+			}
+		</script>
+{% endblock %}
 <!-- <!DOCTYPE html>
 <html>
 <head>

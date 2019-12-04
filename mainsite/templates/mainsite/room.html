@@ -63,11 +63,6 @@
                                                     <td>곡 이름</td>
                                                 </tr>
                                             </thead>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>asdf</td>
-                                                <td>Painkiller</td>
-                                            </tr>
                                         </table>
 									</div>
                             </div>
@@ -110,8 +105,8 @@
                         onBeforeOpen: () => {
                             Swal.showLoading()
                         }
-                        }).then((result) => {
-                            
+                    }).then((result) => {
+                        console.log(result)
                     })                 
 				}
                 chatSocket.onmessage = function(e) {
@@ -119,7 +114,22 @@
                     var type = data["type"];
                     var message = data['message'];
                     if(type=="request_result"){
-                        if(message)Swal.close();
+                        if(message){
+                            Swal.fire({
+                                title: 'Wow!',
+                                text: 'Added',
+                                icon: 'success',
+                                confirmButtonText: 'Cool'
+                            });
+                        }
+                        else {
+                            Swal.fire({
+                                title: 'Aww...',
+                                text: "Something is Wrong",
+                                icon: 'error',
+                                confirmButtonText: 'Umm O K'
+                            });
+                        }
                     }
                 };
 
